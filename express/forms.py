@@ -5,6 +5,8 @@ from wtforms import StringField, PasswordField,BooleanField, SubmitField, TextAr
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from express.models import User,Post
 
+
+# form for new user registration
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -22,7 +24,7 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError('email already in use. Please choose another')
 
-
+# form form user login
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password',validators=[DataRequired()])
@@ -30,6 +32,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
+# form for updating the existing user details
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -47,12 +50,15 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('email already in use. Please choose another')
+
+# form for creating a new blog post
 class PostForm(FlaskForm):
     title = StringField('Title',validators=[DataRequired()])
     content = TextAreaField('Content',validators=[DataRequired()])
     submit = SubmitField('Post')
 
 
+# form for requesting a reset password option
 class RequestResetForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset ')
@@ -62,6 +68,7 @@ class RequestResetForm(FlaskForm):
         if not user:
             raise ValidationError('Account with this email doesn\' exist. You can create one now')
 
+# form for taking new password after resetting the password
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',validators=[DataRequired(), EqualTo('password')])
